@@ -29,6 +29,8 @@
 #include"Converter.h"
 #include"Map.h"
 #include"Initializer.h"
+#include"Parameters.h"
+#include "matrix_utils.h"
 
 #include"Optimizer.h"
 #include"PnPsolver.h"
@@ -435,6 +437,28 @@ void Tracking::Track()
         mlFrameTimes.push_back(mlFrameTimes.back());
         mlbLost.push_back(mState==LOST);
     }
+
+    std::string truth_pose_txts = base_data_folder + "/5_odometry/truth_cam_poses.txt";
+	Eigen::MatrixXd truth_cam_poses(5, 8);
+	if (read_all_number_txt(truth_pose_txts, truth_cam_poses))
+	{
+		mpMapDrawer->truth_poses.resize(truth_cam_poses.rows() / 10, 3);
+		for (int i = 0; i < mpMapDrawer->truth_poses.rows(); i++)
+		{
+			mpMapDrawer->truth_poses.row(i) = truth_cam_poses.row(i * 10).segment(1, 3);
+			// if (build_worldframe_on_ground)
+			// {
+			// 	Eigen::Quaterniond pose_quat(truth_cam_poses(i * 10, 7), truth_cam_poses(i * 10, 4), truth_cam_poses(i * 10, 5), truth_cam_poses(i * 10, 6));
+			// 	Eigen::Matrix4d pose_to_init;
+			// 	pose_to_init.setIdentity();
+			// 	pose_to_init.block(0, 0, 3, 3) = pose_quat.toRotationMatrix();
+			// 	pose_to_init.col(3).head<3>() = Eigen::Vector3d(truth_cam_poses(i * 10, 1), truth_cam_poses(i * 10, 2), truth_cam_poses(i * 10, 3));
+			// 	Eigen::Matrix4d pose_to_ground = InitToGround_eigen.cast<double>() * pose_to_init;
+			// 	mpMapDrawer->truth_poses.row(i) = pose_to_ground.col(3).head<3>();
+			// }
+		}
+		// cout << "Read sampled truth pose size for visualization:  " << mpMapDrawer->truth_poses.rows() << endl;
+	}
 
 }
 

@@ -128,6 +128,19 @@ void MapDrawer::DrawKeyFrames(const bool bDrawKF, const bool bDrawGraph)
         }
     }
 
+    if (1) //draw_map_truth_paths
+		if (truth_poses.rows() > 0)
+		{
+			glLineWidth(mGraphLineWidth * 2);
+			glBegin(GL_LINE_STRIP); // line strip connects adjacent points
+			glColor4f(0.0f, 1.0f, 1.0f, 1.0f);
+			for (int pt_id = 0; pt_id < truth_poses.rows(); pt_id++)
+			{
+				glVertex3f(truth_poses(pt_id, 0), truth_poses(pt_id, 1), truth_poses(pt_id, 2));
+			}
+			glEnd();
+		}
+
     if(bDrawGraph)
     {
         glLineWidth(mGraphLineWidth);

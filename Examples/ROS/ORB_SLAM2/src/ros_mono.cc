@@ -30,6 +30,7 @@
 #include<opencv2/core/core.hpp>
 
 #include"../../../include/System.h"
+#include"../../../include/Parameters.h"
 
 using namespace std;
 
@@ -61,6 +62,10 @@ int main(int argc, char **argv)
     ImageGrabber igb(&SLAM);
 
     ros::NodeHandle nodeHandler;
+    nodeHandler.param<bool>("draw_map_truth_paths", ORB_SLAM2::draw_map_truth_paths, false);
+    nodeHandler.param<bool>("draw_map_truth_paths", ORB_SLAM2::draw_map_truth_paths, false);
+    ros::param::get("/base_data_folder", ORB_SLAM2::base_data_folder);
+
     ros::Subscriber sub = nodeHandler.subscribe("/camera/image_raw", 1, &ImageGrabber::GrabImage,&igb);
 
     ros::spin();

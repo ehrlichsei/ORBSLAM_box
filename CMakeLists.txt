@@ -68,6 +68,8 @@ src/KeyFrameDatabase.cc
 src/Sim3Solver.cc
 src/Initializer.cc
 src/Viewer.cc
+src/Parameters.cc
+src/matrix_utils.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
